@@ -17,6 +17,12 @@ function App() {
 
   function adicionarGasto(e) {
     e.preventDefault()
+    
+    if (!descricao||!valor) {
+      alert("Preencha todos campos")
+      return
+    }
+
     if (categoria === "categoria") {
       alert("Selecione uma categoria")
       return
@@ -48,6 +54,10 @@ function App() {
 
   const cores = ['#7c3aed', '#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6', '#14b8a6']
 
+  function formatarMoeda(valor) {
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+  }
+
   return (
     <>
       <h1>Spendy</h1>
@@ -55,7 +65,7 @@ function App() {
       <form className="form-gasto" onSubmit={adicionarGasto}>
         <input className="input-gasto" type="text" placeholder='Descrição' value={descricao} onChange={e => setDescricao(e.target.value)} />
         <input className="input-gasto" type="number" placeholder='Valor' value={valor} onChange={e => setValor(e.target.value)} />
-        <select value={categoria} onChange={e => setCategoria(e.target.value)}>
+        <select className="select-categoria" value={categoria} onChange={e => setCategoria(e.target.value)}>
           <option value="categoria" disabled>Categoria</option>
           <option value="Alimentação">Alimentação</option>
           <option value="Saúde">Saúde</option>
@@ -70,11 +80,11 @@ function App() {
 
       {gastos.map(gasto => (
         <div className="card-gasto" key={gasto.id}>
-          <p>{gasto.descricao}: {gasto.valor} - {gasto.categoria}</p>
+          <p>{gasto.descricao}: {formatarMoeda(gasto.valor)} - {gasto.categoria}</p>
           <button className="btn-remover" onClick={() => removerGasto(gasto.id)}>Remover</button>
         </div>
       ))}
-      <p className="total">Total: {total}</p>
+      <p className="total">Total: {formatarMoeda(total)}</p>
 
       <PieChart width={400} height={300}>
         <Pie data={dadosGrafico} dataKey="value" nameKey="name">

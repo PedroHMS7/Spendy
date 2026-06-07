@@ -14,6 +14,15 @@
   outline: none;
 }
 
+.select-categoria{
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+}
+
 .input-gasto:focus {
   border-color: #7c3aed;
 }

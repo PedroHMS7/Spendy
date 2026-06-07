@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import './App.css'
 
 function App() {
 
-  const [gastos,setGastos] = useState([
-    {id: 1, descricao: "Academia", valor: 150 },
-    {id: 2, descricao: "Mercado", valor: 500 },
-    {id: 3, descricao: "Transporte", valor: 250}])
+  const valorInicial = localStorage.getItem('gastos')
+
+  const [gastos,setGastos] = useState(JSON.parse(valorInicial) || [])
 
   const [descricao, setDescricao] = useState("")
   const [valor, setValor] = useState("")
@@ -24,23 +24,27 @@ function App() {
     setGastos(gastos.filter(tarefa => tarefa.id !== id))
   }
 
+  useEffect(() => {
+    localStorage.setItem('gastos', JSON.stringify(gastos))
+  }, [gastos])
+
   return (
     <>
       <h1>Spendy</h1>
 
-      <form onSubmit={adicionarGasto}>
-        <input type="text" placeholder='Descrição' value={descricao} onChange={e=> setDescricao(e.target.value)}/>
-        <input type="number" placeholder='Valor' value={valor} onChange={e=> setValor(e.target.value)}  />
-        <button id ="btn-adc-gasto" type="submit">Adicionar Gasto</button>
+      <form className="form-gasto" onSubmit={adicionarGasto}>
+        <input className="input-gasto" type="text" placeholder='Descrição' value={descricao} onChange={e=> setDescricao(e.target.value)}/>
+        <input className="input-gasto" type="number" placeholder='Valor' value={valor} onChange={e=> setValor(e.target.value)}  />
+        <button className="btn-adicionar" type="submit">Adicionar Gasto</button>
       </form>
 
       {gastos.map(gasto => (
-        <div key={gasto.id}>
+        <div className="card-gasto" key={gasto.id}>
         <p>{gasto.descricao}: {gasto.valor}</p>
-        <button onClick={() => removerGasto(gasto.id)}>Remover</button>
+        <button className="btn-remover" onClick={() => removerGasto(gasto.id)}>Remover</button>
       </div>
       ))}
-      <p>Total: {total}</p>
+      <p className="total">Total: {total}</p>
     </>
   )
 }
